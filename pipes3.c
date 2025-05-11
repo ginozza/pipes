@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
     pipe(pipes[i]);
     pid_t pid = fork();
 
-    if (pid == 0) {
+    if (!pid) {
       close(pipes[i][0]);
       uint16_t exp = mod_exp(2, i, phi);
       uint16_t xi = mod_exp(x0, exp, M);
