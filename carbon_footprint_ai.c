@@ -43,6 +43,8 @@ Job *read_file(const char *filename, int *n_jobs) {
     if (fgets(buffer, sizeof(buffer), file) == NULL)
       error("error reading jobs");
 
+    if (strlen(trim_leading(buffer)) == 0) continue;
+
     char *token = strtok(buffer, ";");
     if (!token) continue;
     jobs[i].jobID = atoi(token);
@@ -87,7 +89,7 @@ int main(int argc, char *argv[]) {
         close(pipes[i][0]);
         float potential_savings = .0;
         for (int j = 0; j < n_jobs; ++j)
-          if (jobs[j].renewable)
+          if (jobs[j].renewable == 0 || jobs[j].renewable == 1)
             potential_savings += jobs[j].kWh * FACTOR_EMISSION;
         write(pipes[i][1], &potential_savings, sizeof(float));
         close(pipes[i][1]);
