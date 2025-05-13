@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
         close(pipes[i][0]);
         float potential_savings = .0;
         for (int j = 0; j < n_jobs; ++j)
-          if (jobs[j].renewable == 0)
+          if (jobs[j].renewable)
             potential_savings += jobs[j].kWh * FACTOR_EMISSION;
         write(pipes[i][1], &potential_savings, sizeof(float));
         close(pipes[i][1]);
