@@ -89,11 +89,17 @@ int main(int argc, char *argv[]) {
         if (j != i) close(pipes[j][1]);
       }
 
-      int start = i * (n_rows / N_CHILDS);
-      int end = (i == N_CHILDS - 1) ? n_rows : start + (n_rows / N_CHILDS);
+      int row_block_size = n_rows / 2;
+      int col_block_size = n_cols / 2;    
 
-      for (int r = start; r < end; ++r) {
-        for (int c = 0; c < n_cols; ++c) {
+      int row_start = (i / 2) * row_block_size;
+      int row_end = (i / 2 == 1) ? n_rows : row_start + row_block_size;
+
+      int col_start = (i % 2) * col_block_size;
+      int col_end = (i % 2 == 1) ? n_cols : col_start + col_block_size;
+
+      for (int r = row_start; r < row_end; ++r) {
+        for (int c = col_start; c < col_end; ++c) {
           find_mine(matrix, r, c, n_rows, n_cols, pipes[i][1]);
         }
       }
